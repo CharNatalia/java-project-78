@@ -1,6 +1,6 @@
 package hexlet.code.schemas;
 
-public class StringSchema extends BaseSchema<String> {
+public final class StringSchema extends BaseSchema<String> {
     private int minLength;
     private String contains;
 
@@ -36,7 +36,7 @@ public class StringSchema extends BaseSchema<String> {
             return true;
         }
 
-        if (notNull && minLength == 0) {
+        if (required && minLength == 0) {
             minLength(1);
         }
 
