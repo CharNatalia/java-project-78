@@ -2,8 +2,8 @@ package hexlet.code.schemas;
 
 public class NumberSchema extends BaseSchema<Integer> {
     private boolean positive;
-    private Integer minRange;
-    private Integer maxRange;
+    private int minRange;
+    private int maxRange;
 
     public NumberSchema() {
         super(false);
@@ -17,7 +17,7 @@ public class NumberSchema extends BaseSchema<Integer> {
         return this;
     }
 
-    public NumberSchema range(Integer min, Integer max) {
+    public NumberSchema range(int min, int max) {
         minRange = min;
         maxRange = max;
         return this;
