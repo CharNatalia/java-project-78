@@ -1,8 +1,10 @@
 package hexlet.code;
 
+import hexlet.code.schemas.BaseSchema;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -89,5 +91,37 @@ class TestSchemas {
         data.put("key2", "value2");
         assertTrue(schema.isValid(data)); // true
         System.out.println(schema.isValid(data)); // true
+    }
+
+    @Test
+    public void testMapShape() {
+        var schema = v.map();
+        Map<String, BaseSchema<String>> schemas = new HashMap<>();
+
+// Определяем схемы валидации для значений свойств "firstName" и "lastName"
+// Имя должно быть строкой, обязательно для заполнения
+        schemas.put("firstName", v.string().required());
+// Фамилия обязательна для заполнения и должна содержать не менее 2 символов
+        schemas.put("lastName", v.string().required().minLength(2));
+
+// Настраиваем схему `MapSchema`
+// Передаем созданный набор схем в метод shape()
+        schema.shape(schemas);
+
+// Проверяем объекты
+        Map<String, String> human1 = new HashMap<>();
+        human1.put("firstName", "John");
+        human1.put("lastName", "Smith");
+        schema.isValid(human1); // true
+
+        Map<String, String> human2 = new HashMap<>();
+        human2.put("firstName", "John");
+        human2.put("lastName", null);
+        schema.isValid(human2); // false
+
+        Map<String, String> human3 = new HashMap<>();
+        human3.put("firstName", "Anna");
+        human3.put("lastName", "B");
+        schema.isValid(human3);
     }
 }
