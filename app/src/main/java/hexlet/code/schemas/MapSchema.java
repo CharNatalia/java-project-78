@@ -33,15 +33,15 @@ public class MapSchema extends BaseSchema<Map<String, String>> {
 
         if (schemas != null && !map.isEmpty()) {
             for (var entry : map.entrySet()) {
-                var mapKey = entry.getKey();
-                var mapValue = entry.getValue();
-                for (var schema : schemas.entrySet()) {
-                    if (!mapKey.equals(schema.getKey()) && !schema.getValue().isValid(mapValue)) {
-                        return false;
-                    }
+                var key = entry.getKey();
+                var value = entry.getValue();
+                BaseSchema<String> schema = schemas.get(key);
+                if (schema != null && !schema.isValid(value)) {
+                    return false;
                 }
             }
         }
+
 
         return sizeofMap == null || sizeofMap == map.size();
     }

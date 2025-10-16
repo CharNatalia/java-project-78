@@ -36,7 +36,7 @@ public class StringSchema extends BaseSchema<String> {
             return true;
         }
 
-        if (notNull) {
+        if (notNull && minLength == 0) {
             minLength(1);
         }
 
