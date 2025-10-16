@@ -71,26 +71,20 @@ class TestSchemas {
         var schema = v.map();
 
         assertTrue(schema.isValid(null)); // true
-        System.out.println(schema.isValid(null)); // true
 
         schema.required();
 
         assertFalse(schema.isValid(null)); // false
-        System.out.println(schema.isValid(null)); // false
         assertTrue(schema.isValid(new HashMap<>())); // true
-        System.out.println(schema.isValid(new HashMap<>())); // true
         var data = new HashMap<String, String>();
         data.put("key1", "value1");
         assertTrue(schema.isValid(data)); // true
-        System.out.println(schema.isValid(data)); // true
 
         schema.sizeof(2);
 
         assertFalse(schema.isValid(data));  // false
-        System.out.println(schema.isValid(data));  // false
         data.put("key2", "value2");
         assertTrue(schema.isValid(data)); // true
-        System.out.println(schema.isValid(data)); // true
     }
 
     @Test
