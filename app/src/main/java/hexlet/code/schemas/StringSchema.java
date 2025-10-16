@@ -1,32 +1,13 @@
 package hexlet.code.schemas;
 
-public class StringSchema {
-    private boolean notNull;
+public class StringSchema extends BaseSchema<String> {
     private int minLength;
     private String contains;
 
-//    public StringSchema() {
-//        notNull = false;
-//        minLength = 0;
-//        contains = null;
-//    }
-
-    public boolean getNotNull() {
-        return notNull;
-    }
-
-    public int getMinLength() {
-        return minLength;
-    }
-
-    public String getContains() {
-        return contains;
-    }
-
-    public StringSchema required() {
-        this.notNull = true;
-        this.minLength(1);
-        return this;
+    public StringSchema() {
+        super(false);
+        minLength = 0;
+        contains = null;
     }
 
     public StringSchema minLength(int value) {
@@ -39,13 +20,18 @@ public class StringSchema {
         return this;
     }
 
-    public boolean isValid(Object obj) {
-        if (obj == null) {
-            return !notNull;
+    @Override
+    public boolean isValid(String string) {
+        if (!super.isValid(string)) {
+            return false;
         }
 
-        if (!(obj instanceof String string)) {
-            return false;
+        if (string == null) {
+            return true;
+        }
+
+        if (notNull) {
+            minLength(1);
         }
 
         if (string.length() < minLength) {
