@@ -1,48 +1,31 @@
 package hexlet.code.schemas;
 
 import java.util.Map;
+import java.util.function.Predicate;
 
 public final class MapSchema extends BaseSchema<Map<String, String>> {
-    private Integer sizeofMap;
-    private Map<String, BaseSchema<String>> schemas;
-
-    public MapSchema() {
-        super(false);
-        sizeofMap = null;
-    }
-
     public MapSchema sizeof(Integer size) {
-        sizeofMap = size;
+        Predicate<Map<String, String>> sizeofMap = map -> size == map.size();
+        addCheck("sizeOfMap", sizeofMap);
         return this;
     }
 
     public MapSchema shape(Map<String, BaseSchema<String>> mapSchema) {
-        schemas = mapSchema;
+        Predicate<Map<String, String>> shape = map -> {
+            if (mapSchema != null && !map.isEmpty()) {
+                for (var entry : map.entrySet()) {
+                    var key = entry.getKey();
+                    var value = entry.getValue();
+                    BaseSchema<String> schema = mapSchema.get(key);
+                    if (schema != null && !schema.isValid(value)) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        };
+        addCheck("shape", shape);
         return this;
     }
 
-    @Override
-    public boolean isValid(Map<String, String> map) {
-        if (!super.isValid(map)) {
-            return false;
-        }
-
-        if (map == null) {
-            return true;
-        }
-
-        if (schemas != null && !map.isEmpty()) {
-            for (var entry : map.entrySet()) {
-                var key = entry.getKey();
-                var value = entry.getValue();
-                BaseSchema<String> schema = schemas.get(key);
-                if (schema != null && !schema.isValid(value)) {
-                    return false;
-                }
-            }
-        }
-
-
-        return sizeofMap == null || sizeofMap == map.size();
-    }
 }

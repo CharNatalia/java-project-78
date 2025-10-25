@@ -1,50 +1,29 @@
 package hexlet.code.schemas;
 
+import java.util.function.Predicate;
+
 public final class StringSchema extends BaseSchema<String> {
-    private int minLength;
-    private String contains;
+    private Predicate<String> minLength;
+    private Predicate<String> contains;
 
     @Override
     public StringSchema required() {
         super.required();
+        minLength(1);
         return this;
     }
 
-    public StringSchema() {
-        super(false);
-        minLength = 0;
-        contains = null;
-    }
-
-    public StringSchema minLength(int value) {
-        minLength = value;
+    public StringSchema minLength(int min) {
+        minLength = v -> v.length() > min;
+        addCheck("minLength", minLength);
         return this;
     }
 
     public StringSchema contains(String str) {
-        contains = str;
+        if (str != null) {
+            contains = v -> v.contains(str);
+            addCheck("contains", contains);
+        }
         return this;
     }
-
-    @Override
-    public boolean isValid(String string) {
-        if (!super.isValid(string)) {
-            return false;
-        }
-
-        if (string == null) {
-            return true;
-        }
-
-        if (required && minLength == 0) {
-            minLength(1);
-        }
-
-        if (string.length() < minLength) {
-            return false;
-        }
-
-        return contains == null || string.contains(contains);
-    }
-
 }
